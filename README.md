@@ -1,33 +1,28 @@
 # Allstate (allstate)
-Allstate is a Fortune 500 company. This repository captures the APIs, developer tools, and machine-readable API artifacts for Allstate.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/allstate/refs/heads/main/apis.yml)
+Allstate is a personal lines insurer in the United States offering auto, home, life, and other insurance products through agents, call centers, and direct channels. The Allstate Developer Portal provides partner APIs for agency management, policy quoting, claims integration, and telematics data exchange for authorized business partners.
 
-## Scope
+**Website:** [https://www.allstate.com/](https://www.allstate.com/)
+**Developer Portal:** [https://developer.allstate.com/](https://developer.allstate.com/) (requires login)
 
-- **Type:** Contract
-- **Position:** Consuming
-- **Access:** 3rd-Party
+## Status
 
-## Tags:
+Allstate's developer portal is private and requires authorization. This repository tracks known integration capabilities and partner API patterns.
 
- - Fortune 500
+## Capabilities
 
-## Timestamps
+- **Partner API Portal** — Private developer portal for authorized agencies and business partners
+- **Agency Management Integration** — AMS system connectivity for policy and commission data
+- **Policy Quoting** — Auto and home insurance quote generation APIs for distribution partners
+- **Claims Integration** — Claim submission and tracking for authorized service providers
+- **Telematics Data** — Drivewise connected vehicle data exchange for usage-based insurance
 
-- **Created:** 2026-03-21
-- **Modified:** 2026-03-21
+## Use Cases
 
-## APIs
+- **Agency Management System Integration** — Connect AMS platforms with Allstate for real-time policy and commission data
+- **Insurance Comparison Platforms** — Partner APIs for comparison sites distributing Allstate quotes
+- **Connected Vehicle Telematics** — OEM and aftermarket telematics integration for Drivewise
 
-No public APIs have been documented yet. Contributions welcome.
+## Maintainer
 
-## Common Properties
-
-- [Website](https://www.allstate.com)
-
-## Maintainers
-
-**FN:** API Evangelist
-
-**Email:** info@apievangelist.com
+Kin Lane — kin@apievangelist.com
