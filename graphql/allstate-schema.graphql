@@ -1,0 +1,1134 @@
+"""
+Allstate Insurance - Conceptual GraphQL Schema
+Provider: Allstate Insurance (https://www.allstate.com/)
+GitHub: https://github.com/Allstate
+
+Covers policy management, coverage configuration, driver and vehicle tracking,
+Drivewise telematics, claims handling, repair coordination, and agent location.
+"""
+
+# ─────────────────────────────────────────────
+# Scalars
+# ─────────────────────────────────────────────
+
+scalar Date
+scalar DateTime
+scalar Decimal
+scalar JSON
+
+# ─────────────────────────────────────────────
+# Enums
+# ─────────────────────────────────────────────
+
+enum PolicyLine {
+  AUTO
+  HOME
+  LIFE
+  RENTERS
+  CONDO
+  MOTORCYCLE
+  BOAT
+  BUSINESS
+}
+
+enum PolicyStatus {
+  ACTIVE
+  PENDING
+  CANCELLED
+  EXPIRED
+  LAPSED
+  IN_RENEWAL
+}
+
+enum ClaimStatusCode {
+  REPORTED
+  ASSIGNED
+  UNDER_INVESTIGATION
+  ESTIMATE_PENDING
+  REPAIR_IN_PROGRESS
+  PAYMENT_ISSUED
+  CLOSED
+  DENIED
+}
+
+enum VehicleUse {
+  PLEASURE
+  COMMUTE
+  BUSINESS
+  FARM
+}
+
+enum CoverageType {
+  BODILY_INJURY
+  PROPERTY_DAMAGE
+  COLLISION
+  COMPREHENSIVE
+  UNINSURED_MOTORIST
+  UNDERINSURED_MOTORIST
+  MEDICAL_PAYMENTS
+  RENTAL
+  TOWING
+  DWELLING
+  OTHER_STRUCTURES
+  PERSONAL_PROPERTY
+  LOSS_OF_USE
+  PERSONAL_LIABILITY
+  GUEST_MEDICAL
+}
+
+enum DiscountType {
+  SAFE_DRIVER
+  MULTI_POLICY
+  GOOD_STUDENT
+  NEW_CAR
+  ANTI_THEFT
+  DRIVEWISE
+  PAID_IN_FULL
+  EARLY_SIGNING
+  LOYALTY
+  HOMEOWNER
+}
+
+enum LicenseStatus {
+  VALID
+  SUSPENDED
+  REVOKED
+  EXPIRED
+  SURRENDERED
+}
+
+enum RepairStatus {
+  SCHEDULED
+  IN_PROGRESS
+  WAITING_FOR_PARTS
+  QUALITY_REVIEW
+  COMPLETED
+  CUSTOMER_PICKUP
+}
+
+enum GenderCode {
+  M
+  F
+  X
+  UNDISCLOSED
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+  DOMESTIC_PARTNER
+}
+
+# ─────────────────────────────────────────────
+# Address and Contact
+# ─────────────────────────────────────────────
+
+type Address {
+  line1: String!
+  line2: String
+  city: String!
+  state: String!
+  zip: String!
+  country: String
+}
+
+type PhoneNumber {
+  number: String!
+  type: String
+  primary: Boolean
+}
+
+type GeoLocation {
+  latitude: Float!
+  longitude: Float!
+}
+
+# ─────────────────────────────────────────────
+# Policy Holder and Insured Parties
+# ─────────────────────────────────────────────
+
+"""Account owner responsible for the policy and premium payments."""
+type PolicyHolder {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  dateOfBirth: Date!
+  gender: GenderCode
+  maritalStatus: MaritalStatus
+  email: String!
+  phones: [PhoneNumber!]
+  address: Address!
+  ssn: String
+  policies: [Policy!]
+  namedInsureds: [NamedInsured!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Person listed on the declarations page as an insured."""
+type NamedInsured {
+  id: ID!
+  policyId: ID!
+  firstName: String!
+  lastName: String!
+  dateOfBirth: Date!
+  relationship: String
+  isPrimary: Boolean!
+}
+
+"""Third party added to a policy with limited coverage rights."""
+type AdditionalInsured {
+  id: ID!
+  policyId: ID!
+  name: String!
+  address: Address
+  interestType: String
+  effectiveDate: Date!
+  expirationDate: Date
+}
+
+# ─────────────────────────────────────────────
+# Policy Base and Line-Specific Types
+# ─────────────────────────────────────────────
+
+"""Base policy type with fields common to all lines of business."""
+type Policy {
+  id: ID!
+  policyNumber: String!
+  line: PolicyLine!
+  status: PolicyStatus!
+  policyHolder: PolicyHolder!
+  namedInsureds: [NamedInsured!]
+  additionalInsureds: [AdditionalInsured!]
+  terms: PolicyTerms!
+  premium: Premium!
+  discounts: [Discount!]
+  claims: [Claim!]
+  agent: Agent
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Policy term dates, renewal schedule, and billing configuration."""
+type PolicyTerms {
+  id: ID!
+  policyId: ID!
+  effectiveDate: Date!
+  expirationDate: Date!
+  termMonths: Int!
+  renewalDate: Date
+  billingCycle: String
+  paymentMethod: String
+}
+
+"""Automobile insurance policy."""
+type AutoPolicy {
+  id: ID!
+  policyNumber: String!
+  status: PolicyStatus!
+  policyHolder: PolicyHolder!
+  terms: PolicyTerms!
+  drivers: [Driver!]!
+  vehicles: [Vehicle!]!
+  coverage: AutoCoverage!
+  premium: Premium!
+  discounts: [Discount!]
+  drivewise: Drivewise
+  claims: [Claim!]
+  agent: Agent
+}
+
+"""Homeowners insurance policy."""
+type HomePolicy {
+  id: ID!
+  policyNumber: String!
+  status: PolicyStatus!
+  policyHolder: PolicyHolder!
+  terms: PolicyTerms!
+  propertyAddress: Address!
+  yearBuilt: Int
+  squareFootage: Int
+  constructionType: String
+  coverage: HomeCoverage!
+  premium: Premium!
+  discounts: [Discount!]
+  claims: [Claim!]
+  agent: Agent
+}
+
+"""Life insurance policy."""
+type LifePolicy {
+  id: ID!
+  policyNumber: String!
+  status: PolicyStatus!
+  policyHolder: PolicyHolder!
+  terms: PolicyTerms!
+  faceAmount: Decimal!
+  productType: String
+  beneficiaries: [NamedInsured!]
+  premium: Premium!
+  agent: Agent
+}
+
+"""Renters insurance policy for tenants."""
+type RentersPolicy {
+  id: ID!
+  policyNumber: String!
+  status: PolicyStatus!
+  policyHolder: PolicyHolder!
+  terms: PolicyTerms!
+  rentalAddress: Address!
+  coverage: HomeCoverage!
+  premium: Premium!
+  discounts: [Discount!]
+  claims: [Claim!]
+  agent: Agent
+}
+
+"""Condominium unit owners policy."""
+type CondoPolicy {
+  id: ID!
+  policyNumber: String!
+  status: PolicyStatus!
+  policyHolder: PolicyHolder!
+  terms: PolicyTerms!
+  unitAddress: Address!
+  coverage: HomeCoverage!
+  premium: Premium!
+  discounts: [Discount!]
+  claims: [Claim!]
+  agent: Agent
+}
+
+"""Motorcycle insurance policy."""
+type MotorcyclePolicy {
+  id: ID!
+  policyNumber: String!
+  status: PolicyStatus!
+  policyHolder: PolicyHolder!
+  terms: PolicyTerms!
+  drivers: [Driver!]!
+  vehicles: [Vehicle!]!
+  coverage: AutoCoverage!
+  premium: Premium!
+  discounts: [Discount!]
+  claims: [Claim!]
+  agent: Agent
+}
+
+"""Watercraft / boat insurance policy."""
+type BoatPolicy {
+  id: ID!
+  policyNumber: String!
+  status: PolicyStatus!
+  policyHolder: PolicyHolder!
+  terms: PolicyTerms!
+  boatMake: String
+  boatModel: String
+  boatYear: Int
+  hullLength: Float
+  hullValue: Decimal
+  coverage: AutoCoverage!
+  premium: Premium!
+  claims: [Claim!]
+  agent: Agent
+}
+
+"""Commercial / small business insurance policy."""
+type BusinessPolicy {
+  id: ID!
+  policyNumber: String!
+  status: PolicyStatus!
+  policyHolder: PolicyHolder!
+  terms: PolicyTerms!
+  businessName: String!
+  businessAddress: Address!
+  industry: String
+  employeeCount: Int
+  revenue: Decimal
+  premium: Premium!
+  discounts: [Discount!]
+  claims: [Claim!]
+  agent: Agent
+}
+
+# ─────────────────────────────────────────────
+# Driver and Vehicle
+# ─────────────────────────────────────────────
+
+"""Licensed driver listed on an auto or motorcycle policy."""
+type Driver {
+  id: ID!
+  policyId: ID!
+  firstName: String!
+  lastName: String!
+  dateOfBirth: Date!
+  gender: GenderCode
+  maritalStatus: MaritalStatus
+  licenseNumber: String
+  licenseState: String
+  licenseStatus: LicenseStatus
+  yearsLicensed: Int
+  mvrRecord: MVRRecord
+  driveHistory: DriveHistory
+  drivewiseScore: DrivewiseScore
+}
+
+"""Insured vehicle on an auto, motorcycle, or boat policy."""
+type Vehicle {
+  id: ID!
+  policyId: ID!
+  vin: VIN!
+  info: VehicleInfo!
+  use: VehicleUse!
+  annualMileage: Int
+  primaryDriver: Driver
+  garageAddress: Address
+  lienHolder: String
+  lienHolderAddress: Address
+}
+
+"""Detailed vehicle attributes from year, make, model, and trim."""
+type VehicleInfo {
+  id: ID!
+  vinNumber: String!
+  year: Int!
+  make: String!
+  model: String!
+  trim: String
+  bodyStyle: String
+  engineDisplacement: Float
+  cylinders: Int
+  fuelType: String
+  transmission: String
+  msrp: Decimal
+}
+
+"""Decoded Vehicle Identification Number with structured attributes."""
+type VIN {
+  number: String!
+  wmi: String
+  vds: String
+  vis: String
+  year: Int
+  make: String
+  model: String
+  plantCountry: String
+  isValid: Boolean!
+}
+
+"""Motor Vehicle Record showing violations and license standing."""
+type MVRRecord {
+  id: ID!
+  driverId: ID!
+  reportDate: Date!
+  licenseClass: String
+  licenseStatus: LicenseStatus!
+  violations: [String!]
+  accidents: [String!]
+  suspensions: [String!]
+  pointTotal: Int
+}
+
+"""Aggregated driving history and risk profile for a driver."""
+type DriveHistory {
+  id: ID!
+  driverId: ID!
+  yearsOfHistory: Int!
+  atFaultAccidents: Int
+  notAtFaultAccidents: Int
+  majorViolations: Int
+  minorViolations: Int
+  dwiDuiCount: Int
+  claimsCount: Int
+  riskTier: String
+}
+
+# ─────────────────────────────────────────────
+# Coverage Types
+# ─────────────────────────────────────────────
+
+"""Base coverage with shared limit, deductible, and premium fields."""
+type Coverage {
+  id: ID!
+  policyId: ID!
+  type: CoverageType!
+  limitPerOccurrence: Decimal
+  limitAggregate: Decimal
+  deductible: Deductible
+  annualPremium: Decimal!
+  isActive: Boolean!
+}
+
+"""Aggregate container for all auto coverages on a policy."""
+type AutoCoverage {
+  policyId: ID!
+  bodilyInjury: BodilyInjury
+  propertyDamage: PropertyDamage
+  collision: Collision
+  comprehensive: Comprehensive
+  uninsuredMotorist: UninsuredMotorist
+  underinsuredMotorist: UnderinsuredMotorist
+  medicalPayments: MedicalPayments
+  rental: RentalCoverage
+  towing: TowingCoverage
+}
+
+"""Bodily injury liability with per-person and per-occurrence limits."""
+type BodilyInjury {
+  id: ID!
+  policyId: ID!
+  limitPerPerson: Decimal!
+  limitPerOccurrence: Decimal!
+  annualPremium: Decimal!
+}
+
+"""Property damage liability coverage limit."""
+type PropertyDamage {
+  id: ID!
+  policyId: ID!
+  limit: Decimal!
+  annualPremium: Decimal!
+}
+
+"""Collision coverage for damage from vehicle collisions."""
+type Collision {
+  id: ID!
+  policyId: ID!
+  deductible: Deductible!
+  annualPremium: Decimal!
+  waiverOfDeductible: Boolean
+}
+
+"""Comprehensive coverage for non-collision losses."""
+type Comprehensive {
+  id: ID!
+  policyId: ID!
+  deductible: Deductible!
+  annualPremium: Decimal!
+  glassDeductibleWaiver: Boolean
+}
+
+"""Coverage for accidents involving drivers without insurance."""
+type UninsuredMotorist {
+  id: ID!
+  policyId: ID!
+  limitPerPerson: Decimal!
+  limitPerOccurrence: Decimal!
+  annualPremium: Decimal!
+  includesPropertyDamage: Boolean
+}
+
+"""Coverage when the at-fault driver has insufficient policy limits."""
+type UnderinsuredMotorist {
+  id: ID!
+  policyId: ID!
+  limitPerPerson: Decimal!
+  limitPerOccurrence: Decimal!
+  annualPremium: Decimal!
+}
+
+"""Medical payments coverage for occupants regardless of fault."""
+type MedicalPayments {
+  id: ID!
+  policyId: ID!
+  limitPerPerson: Decimal!
+  annualPremium: Decimal!
+}
+
+"""Rental car reimbursement coverage."""
+type RentalCoverage {
+  id: ID!
+  policyId: ID!
+  dailyLimit: Decimal!
+  occurrenceLimit: Decimal!
+  annualPremium: Decimal!
+}
+
+"""Roadside assistance and towing coverage."""
+type TowingCoverage {
+  id: ID!
+  policyId: ID!
+  perOccurrenceLimit: Decimal!
+  annualPremium: Decimal!
+}
+
+"""Aggregate container for all home-line coverages."""
+type HomeCoverage {
+  policyId: ID!
+  dwelling: Dwelling
+  otherStructures: OtherStructures
+  personalProperty: PersonalProperty
+  lossOfUse: LossOfUse
+  personalLiability: PersonalLiability
+  guestMedical: GuestMedical
+}
+
+"""Coverage A: the main dwelling structure."""
+type Dwelling {
+  id: ID!
+  policyId: ID!
+  replacementCostValue: Decimal!
+  deductible: Deductible!
+  annualPremium: Decimal!
+  extendedReplacementCost: Boolean
+}
+
+"""Coverage B: detached structures on the insured property."""
+type OtherStructures {
+  id: ID!
+  policyId: ID!
+  limit: Decimal!
+  annualPremium: Decimal!
+}
+
+"""Coverage C: personal belongings and household contents."""
+type PersonalProperty {
+  id: ID!
+  policyId: ID!
+  limit: Decimal!
+  replacementCost: Boolean!
+  scheduledItems: [JSON]
+  deductible: Deductible!
+  annualPremium: Decimal!
+}
+
+"""Coverage D: additional living expenses while home is repaired."""
+type LossOfUse {
+  id: ID!
+  policyId: ID!
+  limit: Decimal!
+  durationMonths: Int
+  annualPremium: Decimal!
+}
+
+"""Coverage E: personal liability for bodily injury and property damage."""
+type PersonalLiability {
+  id: ID!
+  policyId: ID!
+  occurrenceLimit: Decimal!
+  annualPremium: Decimal!
+}
+
+"""Coverage F: medical payments to guests injured on the property."""
+type GuestMedical {
+  id: ID!
+  policyId: ID!
+  limitPerPerson: Decimal!
+  annualPremium: Decimal!
+}
+
+# ─────────────────────────────────────────────
+# Deductibles and Premium
+# ─────────────────────────────────────────────
+
+"""Deductible amount and type applied to a coverage."""
+type Deductible {
+  id: ID!
+  amount: Decimal!
+  type: String
+  isPercentage: Boolean
+  percentageOf: String
+}
+
+"""Full premium breakdown including base, fees, surcharges, and taxes."""
+type Premium {
+  id: ID!
+  policyId: ID!
+  annualAmount: Decimal!
+  semiAnnualAmount: Decimal
+  monthlyAmount: Decimal
+  baseAmount: Decimal!
+  fees: Decimal
+  surcharges: Decimal
+  taxes: Decimal
+  discountTotal: Decimal
+  effectiveDate: Date!
+}
+
+"""Rate quotation returned before policy binding."""
+type RateQuote {
+  id: ID!
+  quoteNumber: String!
+  line: PolicyLine!
+  policyHolder: PolicyHolder
+  estimatedPremium: Premium!
+  discounts: [Discount!]
+  expirationDate: Date!
+  bindable: Boolean!
+  createdAt: DateTime!
+}
+
+"""Discount applied to a policy premium."""
+type Discount {
+  id: ID!
+  policyId: ID!
+  type: DiscountType!
+  code: String!
+  name: String!
+  amount: Decimal!
+  percentage: Decimal
+  effectiveDate: Date!
+  expirationDate: Date
+}
+
+"""Safe driver discount eligibility and tier assignment."""
+type SafeDriver {
+  id: ID!
+  driverId: ID!
+  eligible: Boolean!
+  tier: String
+  discountAmount: Decimal
+  yearsWithoutViolation: Int
+}
+
+"""Multi-policy bundling discount details."""
+type MultiplePolicy {
+  id: ID!
+  policyHolderId: ID!
+  bundledPolicyIds: [ID!]!
+  discountAmount: Decimal!
+  discountPercentage: Decimal
+}
+
+# ─────────────────────────────────────────────
+# Drivewise Telematics
+# ─────────────────────────────────────────────
+
+"""Allstate Drivewise telematics program enrollment record."""
+type Drivewise {
+  id: ID!
+  policyId: ID!
+  enrolled: Boolean!
+  enrollmentDate: Date
+  deviceType: String
+  currentScore: DrivewiseScore
+  trips: [TripReport!]
+  milesDriven: MilesDriven
+  discountEarned: Decimal
+}
+
+"""Composite driving score calculated from Drivewise telematics data."""
+type DrivewiseScore {
+  id: ID!
+  drivewiseId: ID!
+  overallScore: Int!
+  speedingScore: Int
+  hardBrakingScore: Int
+  hardAccelerationScore: Int
+  nighttimeDrivingScore: Int
+  lastUpdated: DateTime!
+}
+
+"""Individual trip recorded through the Drivewise program."""
+type TripReport {
+  id: ID!
+  drivewiseId: ID!
+  startTime: DateTime!
+  endTime: DateTime!
+  distanceMiles: Float!
+  maxSpeedMph: Float
+  hardBrakingEvents: Int
+  hardAccelerationEvents: Int
+  nighttimeMiles: Float
+  tripScore: Int
+  startLocation: GeoLocation
+  endLocation: GeoLocation
+}
+
+"""Mileage tracking record for usage-based insurance rating."""
+type MilesDriven {
+  id: ID!
+  policyId: ID!
+  vehicleId: ID!
+  reportedAnnualMileage: Int
+  actualAnnualMileage: Int
+  odometerReading: Int
+  readingDate: Date
+  source: String
+}
+
+# ─────────────────────────────────────────────
+# Claims
+# ─────────────────────────────────────────────
+
+"""Insurance claim filed by a policyholder."""
+type Claim {
+  id: ID!
+  claimNumber: ClaimNumber!
+  policyId: ID!
+  policy: Policy!
+  dateOfLoss: Date!
+  reportedDate: DateTime!
+  status: ClaimStatus!
+  description: String
+  lossLocation: Address
+  adjuster: Adjuster
+  estimate: ClaimEstimate
+  payments: [ClaimPayment!]
+  repair: Repair
+  rental: Rental
+  documents: [JSON]
+  updatedAt: DateTime!
+}
+
+"""Unique claim identifier and filing metadata."""
+type ClaimNumber {
+  number: String!
+  policyNumber: String!
+  filedBy: String
+  filedAt: DateTime!
+  channel: String
+}
+
+"""Current status and workflow stage of a claim."""
+type ClaimStatus {
+  id: ID!
+  claimId: ID!
+  code: ClaimStatusCode!
+  description: String
+  asOf: DateTime!
+  nextStep: String
+}
+
+"""Damage assessment and repair cost estimate for a claim."""
+type ClaimEstimate {
+  id: ID!
+  claimId: ID!
+  estimateNumber: String
+  totalAmount: Decimal!
+  laborAmount: Decimal
+  partsAmount: Decimal
+  taxAmount: Decimal
+  lessDeductible: Decimal
+  netPayable: Decimal
+  estimatedDate: Date!
+  estimatedBy: String
+  status: String
+}
+
+"""Payment issued to a claimant or service provider."""
+type ClaimPayment {
+  id: ID!
+  claimId: ID!
+  paymentNumber: String!
+  amount: Decimal!
+  payee: String!
+  paymentDate: Date!
+  paymentMethod: String
+  description: String
+}
+
+"""Claims adjuster assigned to investigate and process a claim."""
+type Adjuster {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String
+  phone: PhoneNumber
+  office: Address
+  licenseNumber: String
+  licenseState: String
+  specializations: [String!]
+}
+
+# ─────────────────────────────────────────────
+# Repair and Rental
+# ─────────────────────────────────────────────
+
+"""Vehicle repair order associated with an auto claim."""
+type Repair {
+  id: ID!
+  claimId: ID!
+  shop: GoodHandsRepair
+  externalShopName: String
+  externalShopAddress: Address
+  status: RepairStatus!
+  scheduledDate: Date
+  completedDate: Date
+  approvedAmount: Decimal
+  finalAmount: Decimal
+  warrantyPeriodMonths: Int
+}
+
+"""Allstate Good Hands Repair Network certified shop."""
+type GoodHandsRepair {
+  id: ID!
+  name: String!
+  address: Address!
+  phone: PhoneNumber!
+  location: GeoLocation
+  certificationLevel: String
+  brands: [String!]
+  warrantyMonths: Int
+  rating: Float
+  reviewCount: Int
+}
+
+"""Rental vehicle arrangement coordinated during a covered claim."""
+type Rental {
+  id: ID!
+  claimId: ID!
+  rentalCompany: String
+  reservationNumber: String
+  startDate: Date
+  endDate: Date
+  dailyRate: Decimal
+  totalAmount: Decimal
+  coveredAmount: Decimal
+  outOfPocketAmount: Decimal
+  vehicleClass: String
+}
+
+# ─────────────────────────────────────────────
+# Agent and Distribution
+# ─────────────────────────────────────────────
+
+"""Licensed Allstate insurance agent."""
+type Agent {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  displayName: String
+  email: String
+  phones: [PhoneNumber!]
+  address: Address!
+  location: GeoLocation
+  licenseNumber: String
+  licenseStates: [String!]
+  licenseTypes: [String!]
+  agencyName: String
+  bio: String
+  profileUrl: String
+  acceptingNewClients: Boolean
+  languages: [String!]
+}
+
+"""Geographic search results for nearby Allstate agents."""
+type AgentLocator {
+  searchLocation: GeoLocation!
+  searchRadiusMiles: Float!
+  totalResults: Int!
+  agents: [Agent!]!
+}
+
+# ─────────────────────────────────────────────
+# API Credentials
+# ─────────────────────────────────────────────
+
+"""API key credential for programmatic access to Allstate APIs."""
+type APIKey {
+  id: ID!
+  keyPrefix: String!
+  name: String
+  scopes: [String!]
+  createdAt: DateTime!
+  lastUsedAt: DateTime
+  expiresAt: DateTime
+  isActive: Boolean!
+}
+
+"""OAuth 2.0 access token with scope and expiry metadata."""
+type Token {
+  accessToken: String!
+  tokenType: String!
+  expiresIn: Int!
+  scope: String
+  refreshToken: String
+  issuedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Queries
+# ─────────────────────────────────────────────
+
+type Query {
+  """Retrieve a policy by its ID."""
+  policy(id: ID!): Policy
+
+  """Retrieve a policy by policy number."""
+  policyByNumber(policyNumber: String!): Policy
+
+  """Retrieve an auto policy with full driver and vehicle details."""
+  autoPolicy(id: ID!): AutoPolicy
+
+  """Retrieve a home policy with dwelling and coverage details."""
+  homePolicy(id: ID!): HomePolicy
+
+  """Retrieve a life policy."""
+  lifePolicy(id: ID!): LifePolicy
+
+  """Retrieve a renters policy."""
+  rentersPolicy(id: ID!): RentersPolicy
+
+  """Retrieve a condo policy."""
+  condoPolicy(id: ID!): CondoPolicy
+
+  """Retrieve a motorcycle policy."""
+  motorcyclePolicy(id: ID!): MotorcyclePolicy
+
+  """Retrieve a boat policy."""
+  boatPolicy(id: ID!): BoatPolicy
+
+  """Retrieve a business policy."""
+  businessPolicy(id: ID!): BusinessPolicy
+
+  """Look up a policyholder by ID."""
+  policyHolder(id: ID!): PolicyHolder
+
+  """List all policies for a given policyholder."""
+  policiesForHolder(holderId: ID!): [Policy!]
+
+  """Look up a driver by ID."""
+  driver(id: ID!): Driver
+
+  """Look up a vehicle by ID."""
+  vehicle(id: ID!): Vehicle
+
+  """Decode a VIN number."""
+  decodeVIN(vin: String!): VIN
+
+  """Get a Motor Vehicle Record for a driver."""
+  mvrRecord(driverId: ID!): MVRRecord
+
+  """Get a rate quote by quote number."""
+  rateQuote(quoteNumber: String!): RateQuote
+
+  """Retrieve a claim by its ID."""
+  claim(id: ID!): Claim
+
+  """Retrieve a claim by claim number."""
+  claimByNumber(claimNumber: String!): Claim
+
+  """List claims for a policy."""
+  claimsForPolicy(policyId: ID!): [Claim!]
+
+  """Get the current Drivewise enrollment for a policy."""
+  drivewise(policyId: ID!): Drivewise
+
+  """List trip reports for a Drivewise enrollment."""
+  tripReports(drivewiseId: ID!, limit: Int, offset: Int): [TripReport!]
+
+  """Locate nearby agents by zip code."""
+  agentsByZip(zip: String!, radiusMiles: Float): AgentLocator
+
+  """Locate nearby agents by lat/lng coordinates."""
+  agentsByLocation(lat: Float!, lng: Float!, radiusMiles: Float): AgentLocator
+
+  """Find a specific agent by ID."""
+  agent(id: ID!): Agent
+
+  """Find nearby Good Hands Repair shops by zip code."""
+  repairShopsByZip(zip: String!, radiusMiles: Float): [GoodHandsRepair!]
+}
+
+# ─────────────────────────────────────────────
+# Mutations
+# ─────────────────────────────────────────────
+
+input AddressInput {
+  line1: String!
+  line2: String
+  city: String!
+  state: String!
+  zip: String!
+  country: String
+}
+
+input PolicyHolderInput {
+  firstName: String!
+  lastName: String!
+  dateOfBirth: Date!
+  gender: GenderCode
+  maritalStatus: MaritalStatus
+  email: String!
+  phone: String!
+  address: AddressInput!
+}
+
+input DriverInput {
+  firstName: String!
+  lastName: String!
+  dateOfBirth: Date!
+  gender: GenderCode
+  licenseNumber: String!
+  licenseState: String!
+}
+
+input VehicleInput {
+  vin: String!
+  use: VehicleUse!
+  annualMileage: Int
+  garageZip: String
+}
+
+input AutoQuoteInput {
+  policyHolder: PolicyHolderInput!
+  drivers: [DriverInput!]!
+  vehicles: [VehicleInput!]!
+  effectiveDate: Date!
+  coveragePreferences: JSON
+}
+
+input HomeQuoteInput {
+  policyHolder: PolicyHolderInput!
+  propertyAddress: AddressInput!
+  yearBuilt: Int!
+  squareFootage: Int!
+  effectiveDate: Date!
+  coveragePreferences: JSON
+}
+
+input ClaimInput {
+  policyId: ID!
+  dateOfLoss: Date!
+  description: String!
+  lossLocation: AddressInput
+  reportedBy: String
+}
+
+type Mutation {
+  """Request a new auto insurance rate quote."""
+  requestAutoQuote(input: AutoQuoteInput!): RateQuote
+
+  """Request a new home insurance rate quote."""
+  requestHomeQuote(input: HomeQuoteInput!): RateQuote
+
+  """Bind a policy from an approved rate quote."""
+  bindPolicy(quoteNumber: String!, paymentMethod: String!): Policy
+
+  """Add a driver to an existing auto policy."""
+  addDriver(policyId: ID!, driver: DriverInput!): Driver
+
+  """Remove a driver from an auto policy."""
+  removeDriver(policyId: ID!, driverId: ID!): Boolean
+
+  """Add a vehicle to an existing auto policy."""
+  addVehicle(policyId: ID!, vehicle: VehicleInput!): Vehicle
+
+  """Remove a vehicle from an auto policy."""
+  removeVehicle(policyId: ID!, vehicleId: ID!): Boolean
+
+  """Update the coverage limits on a policy."""
+  updateCoverage(policyId: ID!, coverageUpdates: JSON!): Policy
+
+  """File a new insurance claim."""
+  fileClaim(input: ClaimInput!): Claim
+
+  """Upload a document to an existing claim."""
+  uploadClaimDocument(claimId: ID!, documentType: String!, fileBase64: String!): Boolean
+
+  """Enroll a policy in the Drivewise telematics program."""
+  enrollDrivewise(policyId: ID!, deviceType: String): Drivewise
+
+  """Unenroll a policy from Drivewise."""
+  unenrollDrivewise(policyId: ID!): Boolean
+
+  """Issue an OAuth access token."""
+  issueToken(clientId: String!, clientSecret: String!, scope: String): Token
+
+  """Revoke an OAuth access token."""
+  revokeToken(accessToken: String!): Boolean
+}

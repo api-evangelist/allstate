@@ -2,79 +2,72 @@ aid: allstate
 url: https://raw.githubusercontent.com/api-evangelist/allstate/refs/heads/main/apis.yml
 name: Allstate
 tags:
-  - Insurance
-  - Auto Insurance
-  - Home Insurance
-  - Life Insurance
-  - Personal Lines
+- Insurance
+- Auto Insurance
+- Home Insurance
+- Life Insurance
+- Personal Lines
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-description: >-
-  Allstate is a personal lines insurer in the United States offering auto, home, life,
-  and other insurance products through agents, call centers, and direct channels.
-  The Allstate Developer Portal provides partner APIs for agency management, policy
-  quoting, claims integration, and telematics data exchange for authorized business partners.
+description: Allstate is a personal lines insurer in the United States offering auto,
+  home, life, and other insurance products through agents, call centers, and direct
+  channels. The Allstate Developer Portal provides partner APIs for agency management,
+  policy quoting, claims integration, and telematics data exchange for authorized
+  business partners.
 created: '2024-01-01'
 modified: '2026-04-19'
 specificationVersion: '0.19'
 apis: []
 common:
-  - url: https://www.allstate.com/
-    type: Website
-  - url: https://developer.allstate.com/
-    type: Portal
-  - url: https://www.allstate.com/about/contact-allstate
-    type: Support
-  - type: Features
-    data:
-      - name: Partner API Portal
-        description: >-
-          Private developer portal providing authorized business partners and agencies
-          access to Allstate APIs for policy management, quoting, and claims processing.
-      - name: Agency Management Integration
-        description: >-
-          API integration capabilities for independent insurance agencies to connect
-          agency management systems (AMS) with Allstate policy and commission data.
-      - name: Policy Quoting
-        description: >-
-          Partner API access for generating auto and home insurance quotes through
-          Allstate's rating engine for distribution partnerships.
-      - name: Claims Integration
-        description: >-
-          API capabilities for authorized service providers to submit and manage
-          claims, schedule repairs, and track claim status.
-      - name: Telematics Data
-        description: >-
-          Data exchange APIs supporting the Drivewise telematics program for
-          connected vehicle data ingestion and driver behavior scoring.
-  - type: UseCases
-    data:
-      - name: Agency Management System Integration
-        description: >-
-          Enable insurance agencies to connect their AMS platforms with Allstate
-          for real-time policy data, commission statements, and client management.
-      - name: Insurance Comparison Platforms
-        description: >-
-          Partner integrations for insurance comparison and aggregator platforms
-          to include Allstate auto and home quotes in their marketplaces.
-      - name: Connected Vehicle Telematics
-        description: >-
-          Integrate vehicle telematics data from OEM and aftermarket devices into
-          the Allstate Drivewise usage-based insurance program.
-  - type: Integrations
-    data:
-      - name: Agency Management Systems
-        description: >-
-          Integration with major AMS platforms for policy synchronization,
-          commission tracking, and client relationship management.
-      - name: Comparison Shopping Platforms
-        description: >-
-          Partner API connections for insurance comparison websites and
-          aggregators distributing Allstate auto and home quotes.
-      - name: Connected Vehicle Platforms
-        description: >-
-          OEM and aftermarket telematics integration for the Drivewise
-          usage-based insurance program.
+- url: https://www.allstate.com/
+  type: Website
+- url: https://developer.allstate.com/
+  type: Portal
+- url: https://www.allstate.com/about/contact-allstate
+  type: Support
+- type: Features
+  data:
+  - name: Partner API Portal
+    description: Private developer portal providing authorized business partners and
+      agencies access to Allstate APIs for policy management, quoting, and claims
+      processing.
+  - name: Agency Management Integration
+    description: API integration capabilities for independent insurance agencies to
+      connect agency management systems (AMS) with Allstate policy and commission
+      data.
+  - name: Policy Quoting
+    description: Partner API access for generating auto and home insurance quotes
+      through Allstate's rating engine for distribution partnerships.
+  - name: Claims Integration
+    description: API capabilities for authorized service providers to submit and manage
+      claims, schedule repairs, and track claim status.
+  - name: Telematics Data
+    description: Data exchange APIs supporting the Drivewise telematics program for
+      connected vehicle data ingestion and driver behavior scoring.
+- type: UseCases
+  data:
+  - name: Agency Management System Integration
+    description: Enable insurance agencies to connect their AMS platforms with Allstate
+      for real-time policy data, commission statements, and client management.
+  - name: Insurance Comparison Platforms
+    description: Partner integrations for insurance comparison and aggregator platforms
+      to include Allstate auto and home quotes in their marketplaces.
+  - name: Connected Vehicle Telematics
+    description: Integrate vehicle telematics data from OEM and aftermarket devices
+      into the Allstate Drivewise usage-based insurance program.
+- type: Integrations
+  data:
+  - name: Agency Management Systems
+    description: Integration with major AMS platforms for policy synchronization,
+      commission tracking, and client relationship management.
+  - name: Comparison Shopping Platforms
+    description: Partner API connections for insurance comparison websites and aggregators
+      distributing Allstate auto and home quotes.
+  - name: Connected Vehicle Platforms
+    description: OEM and aftermarket telematics integration for the Drivewise usage-based
+      insurance program.
+- url: graphql/allstate-graphql.md
+  type: GraphQL
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
