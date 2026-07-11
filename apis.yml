@@ -19,6 +19,8 @@ modified: '2026-04-19'
 specificationVersion: '0.19'
 apis: []
 common:
+- type: DomainSecurity
+  url: security/allstate-domain-security.yml
 - url: https://www.allstate.com/
   type: Website
 - url: https://developer.allstate.com/
