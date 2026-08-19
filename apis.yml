@@ -27,7 +27,7 @@ description: Allstate is a personal lines insurer in the United States offering 
   business partners.
 created: '2024-01-01'
 modified: '2026-04-19'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis: []
 common:
 - type: DomainSecurity
