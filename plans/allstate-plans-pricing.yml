@@ -1,0 +1,19 @@
+generated: '2026-09-01'
+method: searched
+source: https://www.allstate.com/b2b/embedded-insurance
+plan_count: 0
+plans: []
+note: >-
+  Allstate publishes no API plans, tiers, or developer pricing. API access is a business-development
+  motion, not a self-serve product: the Embedded Solutions page at /b2b/embedded-insurance ends in a
+  "fill out and submit the form and a member of our team will reach out to set up a call" contact gate,
+  and the developer portal at developer.allstate.com requires partner credentials before any API is
+  visible. Commercial terms are negotiated per partner and are not published. plan_count 0 is a searched
+  finding, not an omission.
+evidence:
+- url: https://www.allstate.com/b2b/embedded-insurance
+  status: 200
+  finding: partner contact form; no pricing, tiers, or quotas published
+- url: https://developer.allstate.com/
+  status: 200
+  finding: login wall — "Log in to access the APIs"; no public plan page

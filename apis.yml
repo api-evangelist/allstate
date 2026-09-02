@@ -37,7 +37,7 @@ description: Allstate is a personal lines insurer in the United States offering 
   policy quoting, claims integration, and telematics data exchange for authorized
   business partners.
 created: '2024-01-01'
-modified: '2026-04-19'
+modified: '2026-09-01'
 specificationVersion: '0.23'
 apis: []
 common:
@@ -47,8 +47,16 @@ common:
   type: Website
 - url: https://developer.allstate.com/
   type: Portal
-- url: https://www.allstate.com/about/contact-allstate
+- url: https://www.allstate.com/help-support
   type: Support
+- url: https://www.allstate.com/terms
+  type: TermsOfService
+- url: https://www.allstate.com/privacy-center
+  type: PrivacyPolicy
+- url: https://www.allstate.com/resources
+  type: Blog
+- url: https://github.com/Allstate
+  type: GitHubOrganization
 - type: Features
   data:
   - name: Partner API Portal
@@ -90,8 +98,40 @@ common:
   - name: Connected Vehicle Platforms
     description: OEM and aftermarket telematics integration for the Drivewise usage-based
       insurance program.
-- url: graphql/allstate-graphql.md
-  type: GraphQL
+- type: LLMsTxt
+  url: llms/allstate-llms.txt
+- type: Packages
+  url: packages/allstate-packages.yml
+- type: Plans
+  url: plans/allstate-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/allstate-rate-limits.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-09-01'
+  status: minimal
+  artifacts_added: 5
+  pass: local-v1
+x-coverage:
+  state: gated
+  reason: partner-login
+  detail: >-
+    The Allstate Developer Portal at developer.allstate.com is a credential wall that states "Log in to
+    access the APIs" and declares itself a private computer facility, and it answers HTTP 200 with that
+    same 30,309-byte login page for every path requested — including /openapi.json, /swagger.json,
+    /api-docs and a control path that cannot exist — so no contract, reference or discovery document is
+    reachable without partner credentials.
+  evidence:
+  - url: https://developer.allstate.com/
+    status: 200
+  - url: https://developer.allstate.com/openapi.json
+    status: 200
+  - url: https://developer.allstate.com/.well-known/allstate-negative-control-7f3ab91c.json
+    status: 200
+  - url: https://www.allstate.com/.well-known/api-catalog
+    status: 404
+  - url: https://www.allstate.com/b2b/embedded-insurance
+    status: 200
+  checked: '2026-09-01'

@@ -1,3 +1,9 @@
+# ─────────────────────────────────────────────
+# NOT AN ALLSTATE CONTRACT — CONCEPTUAL SCHEMA
+# Authored by API Evangelist, not published by Allstate. Allstate ships no GraphQL API; no SDL was
+# retrievable from any Allstate host (probed 2026-09-01). Do not treat as a provider contract.
+# ─────────────────────────────────────────────
+
 """
 Allstate Insurance - Conceptual GraphQL Schema
 Provider: Allstate Insurance (https://www.allstate.com/)

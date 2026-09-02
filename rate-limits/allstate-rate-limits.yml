@@ -1,0 +1,19 @@
+generated: '2026-09-01'
+method: searched
+source: https://developer.allstate.com/
+limit_count: 0
+rate_limits: []
+headers: []
+note: >-
+  No rate limits are published. Allstate documents no public API reference, so there is no page stating a
+  quota, window, burst allowance, or the response headers returned on exhaustion. The API documentation
+  sits behind the partner login at developer.allstate.com, which means any published limits are visible
+  only to authenticated partners. No limits could be observed on a live unauthenticated response either,
+  because no unauthenticated Allstate API endpoint is reachable. limit_count 0 is a checked zero.
+evidence:
+- url: https://developer.allstate.com/
+  status: 200
+  finding: login wall; API reference not reachable anonymously
+- url: https://www.allstate.com/b2b/embedded-insurance
+  status: 200
+  finding: business overview only; no technical limits documented

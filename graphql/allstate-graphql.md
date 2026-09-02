@@ -1,3 +1,17 @@
+---
+generated: '2026-09-01'
+method: generated
+authoritative: false
+provider_published: false
+source: null
+warning: >-
+  NOT AN ALLSTATE CONTRACT. This is a CONCEPTUAL schema authored by API Evangelist to illustrate the
+  Allstate insurance domain model. Allstate does not publish a GraphQL API, and no GraphQL endpoint or
+  SDL was retrievable from any Allstate host (probed 2026-09-01). Do NOT wire an apis.yml `type: GraphQL`
+  pointer to this file and do NOT derive contract-bearing artifacts from it — doing so credits Allstate
+  with an API it has never shipped. The pointer was removed from apis.yml on 2026-09-01 for this reason.
+---
+
 # Allstate Insurance GraphQL Schema
 
 ## Overview

@@ -1,0 +1,96 @@
+generated: '2026-09-01'
+method: probed
+source: live HTTP probes of the Allstate web + developer-portal hosts
+note: >-
+  Every named path in the pipeline path list was probed on both Allstate hosts. www.allstate.com returns
+  a clean, correct 404 for all of them (its negative control also 404s, so its answers are trustworthy).
+  developer.allstate.com is a LOGIN-WALLED CATCH-ALL: it answers HTTP 200 with the byte-identical
+  30,309-byte login page for every path requested, including a control path that cannot exist. Its 200s
+  are therefore NOT documents and none were saved. hit_count is 0 and no WellKnown or SecurityTxt pointer
+  is emitted.
+hit_count: 0
+hosts:
+- host: https://www.allstate.com
+  path_echo_control: passed
+  soft_404_control:
+    path: /.well-known/allstate-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 546327
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog.json
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/ucp.json
+    status: 404
+    file: null
+  - path: /.well-known/acp.json
+    status: 404
+    file: null
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: https://developer.allstate.com
+  path_echo_control: failed
+  soft_404_control:
+    path: /.well-known/allstate-negative-control-7f3ab91c.json
+    status: 200
+    bytes: 30309
+    body: login page (identical bytes to every other path on this host)
+  note: >-
+    Catch-all host. Every 200 below is the same login shell, not a document; all are recorded as misses
+    and nothing was saved to disk.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    hit: false
+    reason: catch-all login shell, not a document
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    hit: false
+    reason: catch-all login shell, not a document
+  - path: /openapi.json
+    status: 200
+    file: null
+    hit: false
+    reason: catch-all login shell, not a spec
+  - path: /swagger.json
+    status: 200
+    file: null
+    hit: false
+    reason: catch-all login shell, not a spec
+  - path: /api-docs
+    status: 200
+    file: null
+    hit: false
+    reason: catch-all login shell, not a spec
+  - path: /llms.txt
+    status: 200
+    file: null
+    hit: false
+    reason: catch-all login shell, not an llms.txt

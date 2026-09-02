@@ -1,0 +1,33 @@
+generated: '2026-09-01'
+method: searched
+source: >-
+  npm registry search (registry.npmjs.org/-/v1/search?text=allstate), PyPI (pypi.org/pypi/allstate/json,
+  allstate-api), and the Allstate developer portal at https://developer.allstate.com/
+package_count: 0
+official_package_count: 0
+packages: []
+note: >-
+  No first-party Allstate client library was found in any public registry. The npm search returns only
+  unrelated third-party packages (local-datetime-allstate, redux-dva) with no Allstate authorship; PyPI
+  returns 404 for `allstate` and `allstate-api`; github.com/Allstate exists but publishes 0 public
+  repositories. Allstate's APIs are distributed to authorized partners through the login-walled portal at
+  developer.allstate.com, so any SDK that exists is delivered inside that partner relationship rather than
+  to a public registry. Recorded as a checked zero, not an unchecked gap.
+registries_checked:
+- registry: npm
+  endpoint: https://registry.npmjs.org/-/v1/search?text=allstate
+  status: 200
+  first_party_hits: 0
+- registry: pypi
+  endpoint: https://pypi.org/pypi/allstate/json
+  status: 404
+  first_party_hits: 0
+- registry: pypi
+  endpoint: https://pypi.org/pypi/allstate-api/json
+  status: 404
+  first_party_hits: 0
+- registry: github
+  endpoint: https://api.github.com/orgs/Allstate
+  status: 200
+  first_party_hits: 0
+  note: organization exists with public_repos = 0
