@@ -1,17 +1,17 @@
 ---
 kin_checks:
   slug: allstate
-  schema_version: 0.17.2
-  scored_at: '2026-09-01'
-  run_ts: 2026-09-01T063623
+  schema_version: 0.18.2
+  scored_at: '2026-09-04'
+  run_ts: 2026-09-04T062714
   note: Actionable checks only (missed + partial). earned/na are every other check
-    in rubric/scoring-0.17.2.yml; counts below let you verify that.
+    in rubric/scoring-0.18.2.yml; counts below let you verify that.
   counts:
-    total: 130
-    earned: 14
-    partial: 0
-    missed: 80
-    na: 36
+    total: 132
+    earned: 20
+    partial: 1
+    missed: 73
+    na: 38
   checks:
   - id: multiple_apis
     status: missed
@@ -71,8 +71,6 @@ kin_checks:
     status: missed
   - id: webhooks_advertised
     status: missed
-  - id: github_org_present
-    status: missed
   - id: roadmap_present
     status: missed
   - id: examples_published
@@ -97,8 +95,6 @@ kin_checks:
     status: missed
   - id: agent_skill_present
     status: missed
-  - id: blog_present
-    status: missed
   - id: plans_present
     status: missed
   - id: plans_multiple
@@ -106,10 +102,6 @@ kin_checks:
   - id: pricing_link
     status: missed
   - id: sign_up_present
-    status: missed
-  - id: terms_of_service
-    status: missed
-  - id: privacy_policy
     status: missed
   - id: finops_mapped
     status: missed
@@ -122,10 +114,6 @@ kin_checks:
   - id: reg_authentication_documented
     status: missed
   - id: reg_vulnerability_disclosure
-    status: missed
-  - id: reg_terms_of_service
-    status: missed
-  - id: reg_privacy_policy
     status: missed
   - id: reg_compliance_published
     status: missed
@@ -151,8 +139,6 @@ kin_checks:
     status: missed
   - id: openapi_examples
     status: missed
-  - id: rate_limit_signal
-    status: missed
   - id: event_surface_described
     status: missed
   - id: agent_skills
@@ -173,3 +159,7 @@ kin_checks:
     status: missed
   - id: agentic_commerce
     status: missed
+  - id: rate_limit_signal
+    status: partial
+    earned: 3.5
+    detail: 'grade: documented'
