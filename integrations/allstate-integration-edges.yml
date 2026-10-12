@@ -1,0 +1,18 @@
+generated: '2026-10-13'
+method: searched
+checked:
+- https://app.usecanopy.com/api/v1.0.0/carriers
+marketplace_apps: []
+edges:
+- partner_name: canopy
+  partner: canopy
+  partner_match: domain
+  type: coverage
+  channel: partner-built
+  relationship: carrier-coverage
+  direction: partner-built
+  evidence: https://app.usecanopy.com/api/v1.0.0/carriers
+  category: insurance-carrier
+  covered_as: allstate
+  detected_by: sweep-insurance.py
+  detected: '2026-10-13'
