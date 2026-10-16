@@ -1,27 +1,25 @@
-# Kin Score artifact — allstate — 2026-09-06T011047
+# Kin Score artifact — allstate — 2026-10-11T110117
 # The API Evangelist rating (https://github.com/api-evangelist/kin-score). Generated; do not edit.
 ---
 kin_score:
   slug: allstate
-  schema_version: 0.18.3
-  scored_at: '2026-09-06'
-  run_ts: 2026-09-06T011047
-  composite: 23.5
+  schema_version: 0.23.0
+  scored_at: '2026-10-11'
+  run_ts: 2026-10-11T110117
+  composite: 13.1
   band: emerging
   facets:
-    discoverability: 57.4
-    contract_quality: 41.5
-    governance: 0.0
+    discoverability: 55.4
+    contract_quality: 0.0
+    contract_governance: 0.0
     operational_transparency: 5.3
     developer_ergonomics: 16.7
-    commercial_clarity: 21.1
-    contract_governance: 0.0
     access_clarity: 21.1
   agent_readiness:
-    score: 15.5
-    band: agent-aware
+    score: 2.5
+    band: human-only
     dimensions:
-      spec_presence: true
+      spec_presence: false
       agentic_access: false
       reversibility_documented: false
       mcp_server: false
@@ -44,5 +42,5 @@ kin_score:
     applies: true
     regime: Insurance
     regime_id: insurance
-    score: 21.2
+    score: 12.3
     matched_via: tags
